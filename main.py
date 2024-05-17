@@ -1,8 +1,6 @@
 # IMPORTANDO AS BIBLIOTECAS NECESSÁRIAS
-
 import pyautogui
 import time
-import cv2  
 
 # CRIANDO A FUNÇÃO PARA CLICAR NAS COORDENADAS
 def clicar_em_coordenadas(coordenadas):
@@ -66,7 +64,3 @@ while True:
                 clicar_em_coordenadas([sextoClick])
                 # DANDO UM INTERVALO DE 4 SEGUNDOS PARA QUE A PÁGINA POSSA SER RECARREGADA
                 time.sleep(intervalo)
-
-
-
-

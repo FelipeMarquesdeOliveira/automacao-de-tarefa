@@ -1,59 +1,79 @@
 import pyautogui
 import time
 
-#Função para localizar um botão na tela com um limite de tempo
+def clicar_em_coordenadas(coordenadas):
+    for coord in coordenadas:
+        if coord is not None:
+            pyautogui.click(coord)
+            time.sleep(1)  
+
 def localizar_botao_com_tempo_limite(imagem_botao, tempo_limite=3, confidence=0.8):
     start_time = time.time()
     while time.time() - start_time < tempo_limite:
         botao_pos = pyautogui.locateCenterOnScreen(imagem_botao, confidence=confidence)
-        if botao_pos:
+        if botao_pos is not None:
             return botao_pos
-        time.sleep(0.1)  
-    print(f"Botão {imagem_botao} não encontrado dentro do tempo limite.")
+        time.sleep(0.1)
     return None
 
-#Função para clicar em um botão com um limite de tempo
-def clicar_botao_com_tempo_limite(imagem_botao, tempo_limite=3):
-    botao_pos = localizar_botao_com_tempo_limite(imagem_botao, tempo_limite)
-    if botao_pos:
-        pyautogui.click(botao_pos)
-
-#Função para clicar em um botão e escrever um texto
-def clicar_e_escrever(botao_imagem, texto, tempo_limite=3, delay=0.5):
-    clicar_botao_com_tempo_limite(botao_imagem, tempo_limite)
-    time.sleep(delay)
-    pyautogui.write(texto)
-
-#Dicionário contendo as imagens dos botões
-imagens_botoes = {
-    "botao1": "botao1.png",
-    "botao2": "botao2.png",
-    "botao3": "botao3.png",
-    "botao4": "botao4.png",
-    "botao5": "botao5.png",
-    "botao6": "botao6.png"
-}
-
-#Imagem que define a posição desejada
-posicao_imagem = "posicao1.png"
-
-#Loop principal
-while True:
-    #Clicando nos botões na sequência indicada
-    for nome_botao in ["botao1", "botao2", "botao3", "botao4"]:
-        clicar_botao_com_tempo_limite(imagens_botoes[nome_botao])
-    
-    #Movendo o mouse para a posição específica e realizando um scroll
-    posicao = pyautogui.locateCenterOnScreen(posicao_imagem, confidence=0.8)
-    if posicao:
-        pyautogui.moveTo(posicao)
+def mover_para_posicao_1_e_scroll():
+    posicao1 = localizar_botao_com_tempo_limite('posicao1.png')
+    if posicao1 is not None:
+        pyautogui.moveTo(posicao1)
         pyautogui.scroll(-1000)
+
+imagem_botao_2 = 'despachar.png'
+imagem_botao_3 = 'selecione.png'
+imagem_botao_4 = 'arquivar.png'
+imagem_botao_5 = 'caixa_texto.png'
+imagem_botao_6 = 'salvar_despacho.png'
+seta_direita_funcional = 'seta_direita_funcional.png'
+seta_direita_nao_funcional = 'seta_direita_nao_funcional.png'
+imagens_procuradas = ['colisao.png', 'perda.png', 'estelionato.png']
+
+while True:
+    encontrou_imagem_procurada = False
     
-    #Clicando no botão 5 e escrevendo "Ao Arquivo"
-    clicar_e_escrever(imagens_botoes["botao5"], "Ao Arquivo")
+    for imagem in imagens_procuradas:
+        coordenada = pyautogui.locateCenterOnScreen(imagem, confidence=0.8)
+        if coordenada is not None:
+            clicar_em_coordenadas([(coordenada.x, 649)])
+            encontrou_imagem_procurada = True
+            break
     
-    #Clicando no botão 6
-    clicar_botao_com_tempo_limite(imagens_botoes["botao6"])
-    
-    #Aguardando um intervalo de 2 segundos antes de recarregar a página
-    time.sleep(2)
+    if encontrou_imagem_procurada:
+        despacharClick = localizar_botao_com_tempo_limite(imagem_botao_2, tempo_limite=3)
+        if despacharClick is not None:
+            clicar_em_coordenadas([despacharClick])
+            
+            terceiroClick = localizar_botao_com_tempo_limite(imagem_botao_3, tempo_limite=3)
+            if terceiroClick is not None:
+                clicar_em_coordenadas([terceiroClick])
+                
+                quartoClick = pyautogui.locateCenterOnScreen(imagem_botao_4, confidence=0.8)
+                if quartoClick is not None:
+                    clicar_em_coordenadas([quartoClick])
+                    
+                    mover_para_posicao_1_e_scroll()
+                    
+                    quintoClick = localizar_botao_com_tempo_limite(imagem_botao_5, tempo_limite=3)
+                    if quintoClick is not None:
+                        clicar_em_coordenadas([quintoClick])
+                        
+                        time.sleep(0.5)
+                        pyautogui.write("Ao arquivo")
+                        
+                        sextoClick = pyautogui.locateCenterOnScreen(imagem_botao_6, confidence=0.8)
+                        
+                        if sextoClick is not None:
+                            clicar_em_coordenadas([sextoClick])
+                            
+                            time.sleep(2)
+    else:
+        seta_direita = localizar_botao_com_tempo_limite(seta_direita_funcional, tempo_limite=3)
+        if seta_direita is not None:
+            clicar_em_coordenadas([seta_direita])
+        else:
+            if pyautogui.locateOnScreen(seta_direita_nao_funcional, confidence=0.8) is not None:
+                print("Não há mais páginas para verificar.")
+                break

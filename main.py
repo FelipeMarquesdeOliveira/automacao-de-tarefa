@@ -1,5 +1,6 @@
 import pyautogui
 import time
+import os
 
 def clicar_em_coordenadas(coordenadas):
     for coord in coordenadas:
@@ -22,15 +23,20 @@ def mover_para_posicao_1_e_scroll():
         pyautogui.moveTo(posicao1)
         pyautogui.scroll(-1000)
 
-imagem_botao_2 = 'despachar.png'
-imagem_botao_3 = 'selecione.png'
-imagem_botao_4 = 'arquivar.png'
-imagem_botao_5 = 'caixa_texto.png'
-imagem_botao_6 = 'salvar_despacho.png'
-seta_direita_funcional = 'seta_direita_funcional.png'
-seta_direita_nao_funcional = 'seta_direita_nao_funcional.png'
-imagens_procuradas = ['colisao.png', 'perda.png', 'estelionato.png']
+img_dir = 'assets/img'
 
+imagem_botao_2 = os.path.join(img_dir, 'despachar.png')
+imagem_botao_3 = os.path.join(img_dir, 'selecione.png')
+imagem_botao_4 = os.path.join(img_dir, 'arquivar.png')
+imagem_botao_5 = os.path.join(img_dir, 'caixa_texto.png')
+imagem_botao_6 = os.path.join(img_dir, 'salvar_despacho.png')
+seta_direita_funcional = os.path.join(img_dir, 'seta_direita_funcional.png')
+seta_direita_nao_funcional = os.path.join(img_dir, 'seta_direita_nao_funcional.png')
+imagens_procuradas = [
+    os.path.join(img_dir, 'colisao.png'),
+    os.path.join(img_dir, 'perda.png'),
+    os.path.join(img_dir, 'estelionato.png')
+]
 while True:
     encontrou_imagem_procurada = False
     
